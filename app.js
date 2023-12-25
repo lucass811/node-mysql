@@ -15,6 +15,10 @@ app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
+// MANIPULAÇÃO DE DADOS VIA ROTA
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
 const con = mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -30,6 +34,12 @@ con.connect((erro) => {
 
 app.get('/', (req, res) => {
     res.render('formulario')
+});
+
+//ROTA DE CADASTRO
+app.post('/cadastrar', (req, res) => {
+    console.log(req.body);
+    res.end();
 });
 
 app.listen(3000);
