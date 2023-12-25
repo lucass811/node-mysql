@@ -1,13 +1,15 @@
 const express = require('express');
 
-const { engine } = require('express-handlebars')
+const { engine } = require('express-handlebars');
 
 const mysql = require('mysql2');
 
 const app = express();
 
 // BOOTSTRAP
-app.use('/bootstrap', express.static('./node_modules/bootstrap/dist'))
+app.use('/bootstrap', express.static('./node_modules/bootstrap/dist'));
+// CSS
+app.use('/css', express.static('./css'));
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
