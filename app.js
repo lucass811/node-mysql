@@ -2,9 +2,15 @@ const express = require('express');
 
 const { engine } = require('express-handlebars');
 
+// MODULO FILE UPLOAD
+const  fileupload = require('express-fileupload');
+
 const mysql = require('mysql2');
 
 const app = express();
+
+// HABILITANDO O UPLOAD DE ARQUIVOS
+app.use(fileupload());
 
 // BOOTSTRAP
 app.use('/bootstrap', express.static('./node_modules/bootstrap/dist'));
@@ -38,8 +44,22 @@ app.get('/', (req, res) => {
 
 //ROTA DE CADASTRO
 app.post('/cadastrar', (req, res) => {
-    console.log(req.body);
-    res.end();
+    let nome = req.body.nome;
+    let valor = req.body.valor;
+    let imagem = req.files.imagem.name;
+
+    let sql = `INSERT INTO produtos (nome, valor, imagem) VALUES ('${nome}', ${valor}, '${imagem}')`;
+
+    con.query(sql, (erro, retorno) => {
+        if(erro) throw erro;
+
+        req.files.imagem.mv(__dirname+'/images/'+req.files.imagem.name);
+        console.log(retorno);
+    });
+
+    // RETORNAR PARA A ROTA PRINCIPAL
+    res.redirect('/');
+   
 });
 
-app.listen(3000);
+app.listen(3000);   
